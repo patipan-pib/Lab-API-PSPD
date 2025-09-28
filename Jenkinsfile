@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'vm2' }
+  agent { label 'vm2' } // กำหนดให้รันบน VM2
 
   stages {
     stage('Checkout') {
