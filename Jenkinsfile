@@ -104,6 +104,10 @@ pipeline {
           # ยิง curl ไปยัง endpoint /is_prime/17
           # ถ้าทำงานถูกต้องจะได้ {"number":17,"is_prime":true}
           curl -sSf http://localhost:5000/is_prime/17 | tr -d "\\n" || true
+          # ถ้าทำงานถูกต้องจะได้ {"number":13,"is_prime":true}
+          curl -sSf http://localhost:5000/is_prime/13 | tr -d "\\n" || true
+          # ถ้าทำงานถูกต้องจะได้ {"number":12,"is_prime":false}
+          curl -sSf http://localhost:5000/is_prime/12 | tr -d "\\n" || true
           echo
         '''
       }
