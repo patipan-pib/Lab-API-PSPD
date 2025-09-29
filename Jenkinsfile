@@ -24,6 +24,18 @@ pipeline {
       }
     }
 
+    stage('Push to GHCR') {
+      steps {
+        withCredentials([string(credentialsId: 'ghcr_pat', variable: 'GHCR_PAT')]) {
+          sh '''
+            // สร้าง pat สำหรับ push image
+            echo $GHCR_PAT | docker login ghcr.io -u patipan-pib --password-stdin
+            docker push ${IMAGE_NAME}:${TAG}
+          '''
+        }
+      }
+    }
+
     stage('Run unittest (VM2)') {
       agent { label 'vm2' }
       steps {
