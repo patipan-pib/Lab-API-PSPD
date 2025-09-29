@@ -31,7 +31,7 @@ pipeline {
           # ติดตั้ง dependencies
           python3 -m pip install -r app/requirements.txt
           # รัน unittest (ไฟล์ test_app.py หรือ unit_test.py)
-          python3 -m unittest discover -s . -p "test*.py" -v
+          python3 -m unittest discover -s . -p "unit_test.py" -v
         '''
       }
     }
