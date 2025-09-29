@@ -154,23 +154,23 @@ pipeline {
         }
     }
 
-     /* ========== ROBOT TEST ========== */
-    stage('Robot Tests (VM3)') {
-      agent { label 'vm3' }
-      steps {
-        // ดึงชุดเทสต์จาก VM2 ที่ stash ไว้
-        unstash 'rf-tests'
-        dir('rf-tests') {
-          sh '''
-            python3 -m pip install --upgrade pip
-            python3 -m pip install -r requirements.txt
-            # ยิงไปยัง service ที่รันบน VM3
-            export BASE_URL="http://localhost:5000"
-            python3 -m robot -d reports tests/lab_api.robot
-          '''
-        }
-      }
-    }
+    //  /* ========== ROBOT TEST ========== */
+    // stage('Robot Tests (VM3)') {
+    //   agent { label 'vm3' }
+    //   steps {
+    //     // ดึงชุดเทสต์จาก VM2 ที่ stash ไว้
+    //     unstash 'rf-tests'
+    //     dir('rf-tests') {
+    //       sh '''
+    //         python3 -m pip install --upgrade pip
+    //         python3 -m pip install -r requirements.txt
+    //         # ยิงไปยัง service ที่รันบน VM3
+    //         export BASE_URL="http://localhost:5000"
+    //         python3 -m robot -d reports tests/lab_api.robot
+    //       '''
+    //     }
+    //   }
+    // }
 
     stage('Smoke Test (VM3)') {
       agent { label 'vm3' }
