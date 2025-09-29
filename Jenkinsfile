@@ -103,9 +103,10 @@ pipeline {
       }
       post {
         always {
-          // เก็บรายงานถ้าต้องการ
-          publishHTML(target: [allowMissing: true, keepAll: true, reportDir: 'rf-tests/reports', reportFiles: 'report.html', reportName: 'Robot Report'])
-          junit 'rf-tests/reports/output.xml'
+          robot outputPath: 'rf-tests/reports',
+                outputFileName: 'output.xml',
+                reportFileName: 'report.html',
+                logFileName: 'log.html'
           archiveArtifacts artifacts: 'rf-tests/reports/**', fingerprint: true, allowEmptyArchive: true
         }
       }
