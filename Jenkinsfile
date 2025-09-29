@@ -121,7 +121,7 @@ pipeline {
             python3 -m pip install -r requirements.txt
             # ยิงไปยัง service ที่รันบน VM3
             export BASE_URL="http://localhost:5000"
-            python3 -m robot -d reports tests/prime_api.robot
+            python3 -m robot -d reports tests/lab_api.robot
           '''
         }
       }
