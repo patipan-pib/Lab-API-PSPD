@@ -13,7 +13,6 @@ pipeline {
         git branch: 'main',
             url: 'git@github.com:patipan-pib/Lab-API-PSPD.git',
             credentialsId: 'github_ssh'
-        // เก็บ source ไว้ใช้ที่ VM3 ด้วย
         stash name: 'src', includes: '**/*'
       }
     }
@@ -21,20 +20,18 @@ pipeline {
     stage('Build Docker Image (VM2)') {
       agent { label 'vm2' }
       steps {
-        sh '''
-          docker build -t ${IMAGE_NAME}:latest .
-        '''
+        sh 'docker build -t ${IMAGE_NAME}:latest .'
       }
     }
 
-    stage('Test (VM2)') {
+    stage('Run unittest (VM2)') {
       agent { label 'vm2' }
       steps {
         sh '''
-          # ติดตั้ง pytest (ถ้ามีไฟล์ test)
-          python3 -m pip install -r app/requirements.txt || true
-          python3 -m pip install pytest || true
-          pytest -q || true
+          # ติดตั้ง dependencies
+          python3 -m pip install -r app/requirements.txt
+          # รัน unittest (ไฟล์ test_app.py หรือ unit_test.py)
+          python3 -m unittest discover -s . -p "test*.py" -v
         '''
       }
     }
@@ -42,7 +39,7 @@ pipeline {
     stage('Deploy (VM3)') {
       agent { label 'vm3' }
       steps {
-        unstash 'src'   // ส่ง source ไป VM3 แล้ว build image ที่นี่อีกครั้ง
+        unstash 'src'
         sh '''
           docker build -t ${IMAGE_NAME}:latest .
           docker rm -f ${CONTAINER_NAME} || true
