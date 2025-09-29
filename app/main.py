@@ -3,6 +3,20 @@ import math
 
 app = Flask(__name__)
 
+# ---------- Index / Welcome ----------
+@app.route('/')
+def index():
+    return jsonify({
+        "message": "Welcome to Prime API 🚀",
+        "endpoints": {
+            "/is_prime/<num>": "Check if a number is prime",
+            "/primes?start=10&end=30": "Get prime numbers in range",
+            "/getcode": "Simple code check",
+            "/plus/<a>/<b>": "Add two numbers"
+        }
+    })
+
+# ---------- Logic ----------
 def is_prime(n):
     if not isinstance(n, int) or n < 2:
         return False
@@ -27,7 +41,6 @@ def primes_in_range():
     primes = get_primes_in_range(start, end)
     return jsonify({'start': start, 'end': end, 'primes': primes, 'count': len(primes)})
 
-# 👉 endpoint เสริมสำหรับ unittest ที่คุณยกมา
 @app.route('/getcode', methods=['GET'])
 def get_code():
     return jsonify({"code": "success"})
