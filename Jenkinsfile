@@ -74,19 +74,24 @@ pipeline {
     }
 
     stage('Deploy (VM3)') {
-      agent { label 'vm3' }
-      steps {
+    agent { label 'vm3' }
+    steps {
+        withCredentials([string(credentialsId: 'ghcr_pat', variable: 'GHCR_PAT')]) {
         sh '''
-          # ลบ container เก่า (ถ้ามี) เพื่อป้องกันชื่อชนกัน
-          docker rm -f ${IMAGE} || true
-          
-          # ดึง image จาก GHCR ตาม tag ที่ push ขึ้นไป
-          docker pull ${FULL_IMAGE}:${TAG}
-          
-          # รัน container ใหม่ที่พอร์ต 5000
-          docker run -d --name ${IMAGE} -p 5000:5000 ${FULL_IMAGE}:${TAG}
+            # ลบ container เก่า ถ้ามี
+            docker rm -f ${IMAGE} || true
+
+            # login GHCR ก่อน pull
+            echo "$GHCR_PAT" | docker login ${REGISTRY} -u ${OWNER} --password-stdin
+
+            # ดึง image จาก GHCR
+            docker pull ${FULL_IMAGE}:${TAG}
+
+            # รัน container ใหม่
+            docker run -d --name ${IMAGE} -p 5000:5000 ${FULL_IMAGE}:${TAG}
         '''
-      }
+        }
+    }
     }
 
     stage('Smoke Test (VM3)') {
