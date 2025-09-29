@@ -10,6 +10,8 @@
 
 # 10.55.245.176:5000
 
+# https://docs.google.com/document/d/1Ouuz8hrII5wqpWGe18TdM4-b8wi0Vkp-pyXwMtUyT9A/edit?tab=t.0#heading=h.7o1aatw19hwf
+
 # ถ้าต้องการแก้ไข ip add ใน vm1 vm2 vm3
 sudo nano /etc/hosts
 # การออก จาก nano Ctrl + x ->  y -> Enter
