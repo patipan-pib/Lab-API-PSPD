@@ -134,7 +134,7 @@ pipeline {
     //       junit 'rf-tests/reports/output.xml'
     //       archiveArtifacts artifacts: 'rf-tests/reports/**', fingerprint: true
     //     }
-      }
+    //   }
     }
 
     stage('Smoke Test (VM3)') {
