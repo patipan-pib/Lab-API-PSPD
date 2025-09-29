@@ -17,8 +17,8 @@ pipeline {
     ROBOT_REPO   = 'git@github.com:patipan-pib/Lab-API-PSPD-Robot.git'
 
     VM3_HOST     = 'vm3.local'
-    // BASE_URL สำหรับ Robot ตอนรันบน VM2 → ชี้ localhost:5001
-    ROBOT_BASE_URL_VM2 = "http://localhost:5001"
+    // BASE_URL สำหรับ Robot ตอนรันบน VM2 → ชี้ localhost:5000
+    ROBOT_BASE_URL_VM2 = "http://localhost:5000"
   }
 
   stages {
@@ -71,17 +71,17 @@ pipeline {
         '''
       }
     }
-    /* ========== LOCAL SMOKE + ROBOT ON VM2 (hit localhost:5001) ========== */
+    /* ========== LOCAL SMOKE + ROBOT ON VM2 (hit localhost:5000) ========== */
     stage('Start App for Robot (VM2)') {
       agent { label 'vm2' }
       steps {
         sh '''
           docker rm -f ${IMAGE}-test || true
 
-          docker run -d --name ${IMAGE}-test -p 5001:5000 ${IMAGE}:local
+          docker run -d --name ${IMAGE}-test -p 5000:5000 ${IMAGE}:local
 
           for i in $(seq 1 30); do
-            curl -fsS http://localhost:5001/is_prime/13 && break
+            curl -fsS http://localhost:5000/is_prime/13 && break
             sleep 1
           done
         '''
