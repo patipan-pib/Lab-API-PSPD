@@ -49,10 +49,9 @@ pipeline {
       agent { label 'vm2' }
       steps {
         sh '''
-          # Build image จาก Dockerfile ใน repo
+
           docker build -t ${IMAGE}:local .
           
-          # Tag image ให้ตรงกับ GHCR (ทั้ง tag ตาม build number และ latest)
           docker tag ${IMAGE}:local ${FULL_IMAGE}:${TAG}
           docker tag ${IMAGE}:local ${FULL_IMAGE}:latest
         '''
@@ -63,15 +62,12 @@ pipeline {
       agent { label 'vm2' }
       steps {
         sh '''
-          # ติดตั้ง dependencies ของ app
+
           python3 -m pip install -r app/requirements.txt || true
-          
-          # (optional) ติดตั้ง lib เพิ่มถ้าต้องการ export report XML
           python3 -m pip install unittest-xml-reporting || true
           
-          # รัน unittest อัตโนมัติ ค้นหาไฟล์ test*.py
-          # เช่น test_app.py หรือ unit_test.py
-          python3 -m unittest discover -s . -p "unit_test.py" -v || true
+          # unit_test.py 
+          python3 -m unittest discover -s . -p "unit_test.py" -v || true 
         '''
       }
     }
@@ -80,13 +76,10 @@ pipeline {
       agent { label 'vm2' }
       steps {
         sh '''
-          # เคลียร์ container ทดสอบเดิมถ้ามี
           docker rm -f ${IMAGE}-test || true
 
-          # รันคอนเทนเนอร์ทดสอบบนพอร์ต 5001
           docker run -d --name ${IMAGE}-test -p 5001:5000 ${IMAGE}:local
 
-          # รอให้พร้อมใช้งาน (ลองตี endpoint ง่าย ๆ)
           for i in $(seq 1 30); do
             curl -fsS http://localhost:5001/is_prime/13 && break
             sleep 1
@@ -103,7 +96,8 @@ pipeline {
             python3 -m pip install -r requirements.txt
             export BASE_URL="${ROBOT_BASE_URL_VM2}"
             echo "Robot BASE_URL=$BASE_URL"
-            python3 -m robot -d reports tests/lab_api.robot
+
+            python3 -m robot --xunit xunit.xml -d reports tests/lab_api.robot
           '''
         }
       }
@@ -112,7 +106,7 @@ pipeline {
           // เก็บรายงานถ้าต้องการ
           publishHTML(target: [allowMissing: true, keepAll: true, reportDir: 'rf-tests/reports', reportFiles: 'report.html', reportName: 'Robot Report'])
           junit 'rf-tests/reports/output.xml'
-          archiveArtifacts artifacts: 'rf-tests/reports/**', fingerprint: true
+          archiveArtifacts artifacts: 'rf-tests/reports/**', fingerprint: true, allowEmptyArchive: true
         }
       }
     }
@@ -154,23 +148,6 @@ pipeline {
         }
     }
 
-    //  /* ========== ROBOT TEST ========== */
-    // stage('Robot Tests (VM3)') {
-    //   agent { label 'vm3' }
-    //   steps {
-    //     // ดึงชุดเทสต์จาก VM2 ที่ stash ไว้
-    //     unstash 'rf-tests'
-    //     dir('rf-tests') {
-    //       sh '''
-    //         python3 -m pip install --upgrade pip
-    //         python3 -m pip install -r requirements.txt
-    //         # ยิงไปยัง service ที่รันบน VM3
-    //         export BASE_URL="http://localhost:5000"
-    //         python3 -m robot -d reports tests/lab_api.robot
-    //       '''
-    //     }
-    //   }
-    // }
 
     stage('Smoke Test (VM3)') {
       agent { label 'vm3' }
