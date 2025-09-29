@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  lab-api:
+    build:
+      context: .          # root ที่มี Dockerfile
+      dockerfile: Dockerfile
+    container_name: prime-api
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
