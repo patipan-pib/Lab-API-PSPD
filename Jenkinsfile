@@ -125,15 +125,15 @@ pipeline {
           '''
         }
       }
-      post {
-        always {
-          // แสดงรายงาน Robot + เก็บไฟล์รายงาน
-          publishHTML(target: [allowMissing: true, keepAll: true,
-                               reportDir: 'rf-tests/reports', reportFiles: 'report.html',
-                               reportName: 'Robot Report'])
-          junit 'rf-tests/reports/output.xml'
-          archiveArtifacts artifacts: 'rf-tests/reports/**', fingerprint: true
-        }
+    //   post {
+    //     always {
+    //       // แสดงรายงาน Robot + เก็บไฟล์รายงาน
+    //       publishHTML(target: [allowMissing: true, keepAll: true,
+    //                            reportDir: 'rf-tests/reports', reportFiles: 'report.html',
+    //                            reportName: 'Robot Report'])
+    //       junit 'rf-tests/reports/output.xml'
+    //       archiveArtifacts artifacts: 'rf-tests/reports/**', fingerprint: true
+    //     }
       }
     }
 
