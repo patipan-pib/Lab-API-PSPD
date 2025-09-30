@@ -26,12 +26,21 @@ def is_prime(n):
             return False
     return True
 
+def is_next(n):
+    return n + 5
+
 def get_primes_in_range(start, end):
     return [num for num in range(max(2, start), end + 1) if is_prime(num)]
+
+@app.route('/next5/<string:num>', methods=['GET'])
+def check_next(num):
+    num = float(num)
+    return jsonify({'result': num + 5})
 
 @app.route('/is_prime/<int:num>', methods=['GET'])
 def check_prime(num):
     return jsonify({'number': num, 'is_prime': is_prime(num)})
+
 
 @app.route('/primes', methods=['GET'])
 def primes_in_range():

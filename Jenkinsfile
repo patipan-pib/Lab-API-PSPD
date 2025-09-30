@@ -81,7 +81,7 @@ pipeline {
           docker run -d --name ${IMAGE}-test -p 5000:5000 ${IMAGE}:local
 
           for i in $(seq 1 30); do
-            curl -fsS http://localhost:5000/is_prime/13 && break
+            curl -fsS http://localhost:5000/next5/1 && break
             sleep 1
           done
         '''
@@ -155,9 +155,9 @@ pipeline {
       steps {
         sh '''
           sleep 3
-          curl -sSf http://localhost:5000/is_prime/17 | tr -d "\\n" || true
-          curl -sSf http://localhost:5000/is_prime/13 | tr -d "\\n" || true
-          curl -sSf http://localhost:5000/is_prime/12 | tr -d "\\n" || true
+          curl -sSf http://localhost:5000/next5/1 | tr -d "\\n" || true
+          curl -sSf http://localhost:5000/next5/-10 | tr -d "\\n" || true
+          curl -sSf http://localhost:5000/next5/1.5 | tr -d "\\n" || true
           echo
         '''
       }

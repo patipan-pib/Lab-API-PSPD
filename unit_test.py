@@ -31,6 +31,22 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         data = res.get_json()
         self.assertEqual(data["primes"], [11, 13, 17, 19])
+    
+    def test_x_is_1(self):
+        res = self.app.get('/next5/1')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.get_json(), {'result': 6})
+    
+    def test_x_is_neg10(self):
+        res = self.app.get('/next5/-10')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.get_json(), {'result': -5})
+
+    def test_x_is_1dot5(self):
+        res = self.app.get('/next5/1.5')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.get_json(), {'result': 6.5})
+        
 
 if __name__ == "__main__":
     unittest.main()
