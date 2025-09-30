@@ -1,4 +1,11 @@
 # APP for Prime API
+## password
+### Jenkins port 8080
+- username: Patipan
+- password: 290846
+### VM 
+- username: ชื่อ vm
+- password: 290846
 
 ## Run Locally
 ```bash
