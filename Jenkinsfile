@@ -6,7 +6,8 @@ pipeline {
     // ชื่อ owner ใน GitHub (username หรือ org)
     OWNER        = 'patipan-pib'
     // ชื่อ image
-    IMAGE        = 'prime-api'
+    // IMAGE        = 'prime-api'
+    IMAGE        = 'lab-api'
     REGISTRY     = 'ghcr.io'
     FULL_IMAGE   = "${REGISTRY}/${OWNER}/${IMAGE}"
     // Tag ของ image ใช้ build number (unique ทุก build)
